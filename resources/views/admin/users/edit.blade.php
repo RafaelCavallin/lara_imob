@@ -9,11 +9,11 @@
         <div class="dash_content_app_header_actions">
             <nav class="dash_content_app_breadcrumb">
                 <ul>
-                    <li><a href="">Dashboard</a></li>
+                    <li><a href="{{ route('admin.home') }}">Dashboard</a></li>
                     <li class="separator icon-angle-right icon-notext"></li>
-                    <li><a href="">Clientes</a></li>
+                    <li><a href="{{ route('admin.users.index') }}">Clientes</a></li>
                     <li class="separator icon-angle-right icon-notext"></li>
-                    <li><a href="" class="text-orange">Novo Cliente</a></li>
+                    <li><a href="{{ route('admin.users.create') }}" class="text-orange">Novo Cliente</a></li>
                 </ul>
             </nav>
         </div>
@@ -54,6 +54,8 @@
             <form class="app_form" action="{{ route('admin.users.update', ['user' => $user->id]) }}" method="post" enctype="multipart/form-data">
             @csrf
             @method('PUT')
+            <input type="hidden" name="id" value="{{ $user->id }}">
+
                 <div class="nav_tabs_content">
                     <div id="data">
                         <div class="label_gc">
