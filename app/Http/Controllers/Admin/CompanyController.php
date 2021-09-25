@@ -3,7 +3,10 @@
 namespace LaraDev\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use LaraDev\Company;
 use LaraDev\Http\Controllers\Controller;
+use LaraDev\Http\Requests\Admin\Company as CompanyRequest;
+use LaraDev\User;
 
 class CompanyController extends Controller
 {
@@ -14,7 +17,10 @@ class CompanyController extends Controller
      */
     public function index()
     {
-        return view('admin.companies.index');
+        $companies = Company::all();
+        return view('admin.companies.index', [
+            'companies' => $companies,
+        ]);
     }
 
     /**
@@ -22,9 +28,18 @@ class CompanyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $users = User::orderBy('name')->get();
+
+        if (!empty($request->user)) {
+            $user = User::where('id', $request->user)->first();
+        }
+
+        return view('admin.companies.create', [
+            'users' => $users,
+            'selected' => (!empty($user) ? $user : null),
+        ]);
     }
 
     /**
@@ -33,9 +48,10 @@ class CompanyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CompanyRequest $request)
     {
-        //
+        $companyCreate = Company::create($request->all());
+        var_dump($companyCreate);
     }
 
     /**
@@ -57,7 +73,14 @@ class CompanyController extends Controller
      */
     public function edit($id)
     {
-        //
+        $company = Company::where('id', $id)->first();
+
+        $users = User::orderBy('name')->get();
+
+        return view('admin.companies.edit', [
+            'company' => $company,
+            'users' => $users,
+        ]);
     }
 
     /**
@@ -67,9 +90,15 @@ class CompanyController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CompanyRequest $request, $id)
     {
-        //
+        $company = Company::where('id', $id)->first();
+        $company->fill($request->all());
+        $company->save();
+
+        return redirect()->route('admin.companies.edit', [
+            'company' => $company->id,
+        ])->with(['color' => 'green', 'message' => 'Empresa atualizada com sucesso!']);
     }
 
     /**

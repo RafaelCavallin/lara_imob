@@ -215,6 +215,13 @@ return [
         'spouse_occupation' => 'profissão do cônjuge',
         'spouse_income' => 'renda do cônjuge',
         'spouse_company_work' => 'empresa do cônjuge',
+
+        //Company
+        'social_name' => 'razão social',
+        'alias_name' => 'nome fantasia',
+        'document_company' => 'CNPJ',
+        'document_company_secondary' => 'inscrição estadual',
+        'user' => 'usuário',
     ],
 
 ];
