@@ -30,6 +30,9 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'as' => 'admin.'], fu
 
         /** Companies */
         Route::resource('companies', 'CompanyController');
+
+        /** Properties */
+        Route::resource('properties', 'PropertyController');
     });
 
     /** Logout */

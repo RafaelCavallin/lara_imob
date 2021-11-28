@@ -82,6 +82,11 @@ class User extends Authenticatable
         return $this->hasMany(Company::class, 'user', 'id');
     }
 
+    public function properties()
+    {
+        return $this->hasMany(Property::class, 'user', 'id');
+    }
+
     public function getUrlCoverAttribute()
     {
         if (!empty($this->cover)) {
@@ -123,7 +128,7 @@ class User extends Authenticatable
 
     public function setIncomeAttribute($value)
     {
-        $this->attributes['income'] = floatval($this->convertStringToDoble($value));
+        $this->attributes['income'] = floatval($this->convertStringToDouble($value));
     }
 
     public function getIncomeAttribute($value)
@@ -175,7 +180,7 @@ class User extends Authenticatable
 
     public function setSpouseIncomeAttribute($value)
     {
-        $this->attributes['spouse_income'] = floatval($this->convertStringToDoble($value));
+        $this->attributes['spouse_income'] = floatval($this->convertStringToDouble($value));
     }
 
     public function getSpouseIncomeAttribute($value)
@@ -213,7 +218,7 @@ class User extends Authenticatable
         return (new \DateTime($year . '-' . $month . '-' . $day))->format('Y-m-d');
     }
 
-    private function convertStringToDoble(?string $param)
+    private function convertStringToDouble(?string $param)
     {
         if (empty($param)) {
             return null;
