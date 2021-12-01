@@ -3,6 +3,10 @@
 namespace LaraDev;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use LaraDev\PropertyImage;
+use LaraDev\Support\Cropper;
 use LaraDev\User;
 
 class Property extends Model
@@ -54,6 +58,28 @@ class Property extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user', 'id');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(PropertyImage::class, 'property', 'id')->orderBy('cover', 'ASC');
+    }
+
+    public function cover()
+    {
+        $images = $this->images();
+        $cover = $images->where('cover', 1)->first(['path']);
+
+        if (!$cover) {
+            $images = $this->images();
+            $cover = $images->first(['path']);
+        }
+
+        if (empty($cover['path']) || !File::exists('../public/storage/' . $cover['path'])) {
+            return url(asset('backend/assets/images/realty.jpeg'));
+        }
+
+        return Storage::url(Cropper::thumb($cover['path'], 1366, 768));
     }
 
     public function setSaleAttribute($value)
